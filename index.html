@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapRecover (ACM MM'25)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- KaTeX for LaTeX Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0KOVEMeaOzwG5nRTgHLiQCqE/OKz5O/iHPFghJSm8l39GSlrqAlCaf" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind's gray-50 */
+        }
+        .section-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 800; /* extrabold */
+            color: #1e293b; /* slate-800 */
+            text-align: center;
+            margin-bottom: 3rem; /* mb-12 */
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 0%, rgba(237, 242, 255, 0.8), rgba(248, 250, 252, 0) 60%);
+        }
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 1rem;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0; /* slate-200 */
+        }
+        th {
+            background-color: #f1f5f9; /* slate-100 */
+            font-weight: 600;
+            color: #334155; /* slate-700 */
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tbody tr:hover {
+            background-color: #f8fafc; /* slate-50 */
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <!-- Header Section -->
+    <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-slate-800 tracking-tight">CapRecover</div>
+            <div class="space-x-8 hidden md:flex items-center">
+                <a href="#abstract" class="text-slate-600 hover:text-indigo-600 transition-colors duration-300">Abstract</a>
+                <a href="#method" class="text-slate-600 hover:text-indigo-600 transition-colors duration-300">Method</a>
+                <a href="#results" class="text-slate-600 hover:text-indigo-600 transition-colors duration-300">Results</a>
+                <a href="#defense" class="text-slate-600 hover:text-indigo-600 transition-colors duration-300">Defense</a>
+                 <a href="#citation" class="text-slate-600 hover:text-indigo-600 transition-colors duration-300">Citation</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="relative hero-gradient">
+        <div class="container mx-auto px-6 py-16 md:py-24 text-center">
+            <div class="max-w-8xl mx-auto">
+                <span class="bg-indigo-100 text-indigo-700 text-sm font-semibold px-3 py-1 rounded-full">ACM Multimedia 2025</span>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mt-4 mb-6 leading-tight">
+                    CapRecover: A Cross-Modality Feature Inversion Attack Framework on Vision Language Models
+                </h1>
+                <p class="text-lg text-slate-600 mb-8">
+                    Kedong Xiu & Sai Qian Zhang<br>
+                    <span class="text-md text-slate-500">New York University</span>
+                </p>
+                <div class="flex justify-center items-center space-x-4">
+                    <a href="https://arxiv.org/abs/2507.22828" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 ease-in-out transform hover:-translate-y-1">
+                        Read the Paper (PDF)
+                    </a>
+                    <a href="https://github.com/Jus1mple/Image2CaptionAttack" class="bg-slate-800 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-slate-900 transition duration-300 ease-in-out transform hover:-translate-y-1">
+                        View the Code (GitHub)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Abstract Section -->
+    <section id="abstract" class="py-20 bg-white fade-in-section">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <h2 class="section-title">Overview</h2>
+            <p class="text-xl text-center text-slate-600 leading-relaxed">
+                In modern "split deployment" AI applications, the vision encoder runs on-device, sending only intermediate features to the cloud. While efficient, this paradigm introduces severe privacy risks. Previous attacks focused on image reconstruction with limited success. Our work poses a critical question: can we bypass image reconstruction entirely and directly recover high-level semantic information, such as captions or class labels, from these intermediate features?
+            </p>
+        </div>
+    </section>
+
+    <!-- Core Contributions -->
+    <section class="py-20 fade-in-section">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <h2 class="section-title">Core Contributions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200/80 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="mx-auto bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">A Novel Attack Framework</h3>
+                    <p class="text-slate-600">We propose CAPRECOVER, the first general cross-modality feature inversion framework that directly recovers semantics without image reconstruction.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200/80 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="mx-auto bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Comprehensive Evaluation</h3>
+                    <p class="text-slate-600">We validate the attack's effectiveness across multiple datasets and models, revealing a strong correlation between semantic leakage and network depth.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200/80 transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="mx-auto bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">An Efficient Defense</h3>
+                    <p class="text-slate-600">We propose a simple, efficient, and training-free noise-based defense mechanism that can be deployed on edge devices to protect user privacy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Teaser Image -->
+    <section class="py-10 bg-white fade-in-section">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="bg-slate-100 p-4 rounded-lg shadow-inner">
+                <img src="https://arxiv.org/html/2507.22828v2/x1.png" alt="Cross-modality feature inversion attack scenario" class="rounded-md mx-auto shadow-lg">
+                <p class="text-center mt-4 text-sm text-slate-500">Figure 1: The CAPRECOVER attack scenario.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Method Section -->
+    <section id="method" class="py-20 fade-in-section">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title">Our Method</h2>
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">The CAPRECOVER Framework</h3>
+                    <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                        To achieve direct semantic recovery, we designed the CAPRECOVER framework, which consists of three core modules:
+                    </p>
+                    <ul class="space-y-4 text-lg">
+                        <li class="flex items-start">
+                             <span class="text-indigo-500 font-bold mr-3 mt-1">&#10140;</span>
+                            <div><strong class="text-slate-800">Feature Projection Module:</strong> Maps intermediate features of various forms into a unified feature space.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <span class="text-indigo-500 font-bold mr-3 mt-1">&#10140;</span>
+                            <div><strong class="text-slate-800">Feature-Text Alignment Module:</strong> Uses a Q-Former to establish a semantic correspondence between visual features and text descriptions.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <span class="text-indigo-500 font-bold mr-3 mt-1">&#10140;</span>
+                            <div><strong class="text-slate-800">Description Generation Module:</strong> Employs a <span class="text-red-600 font-semibold">frozen</span> Large Language Model (LLM) to generate the final text output, greatly improving training efficiency.</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 mt-8 md:mt-0">
+                    <div class="bg-white p-4 rounded-lg shadow-2xl shadow-slate-200/80">
+                        <img src="https://arxiv.org/html/2507.22828v2/x2.png" alt="The CAPRECOVER framework diagram" class="rounded-md">
+                        <p class="text-center mt-2 text-sm text-slate-500">Figure 2: The CAPRECOVER framework comprises three core modules.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="py-20 bg-white fade-in-section">
+        <div class="container mx-auto px-6">
+            <h2 class="section-title">Key Results</h2>
+            
+            <!-- Caption Reconstruction -->
+             <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Caption Reconstruction: Leakage vs. Depth</h3>
+                    <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                        Our first set of experiments on caption reconstruction revealed that semantic leakage is strongly correlated with network depth. As shown, heatmaps from shallow layers (Layer 1) focus on low-level edges, while deep layers (Layer 4) focus on high-level semantic regions like the "person" and "snowy field".
+                    </p>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        The table below quantifies this trend: as the layer depth increases, all metrics improve significantly, proving that deeper features leak more recoverable semantic information.
+                    </p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-2xl shadow-slate-200/80">
+                     <img src="https://arxiv.org/html/2507.22828v2/x6.png" alt="Heatmaps and generated captions from different network layers" class="rounded-lg object-cover w-full h-full">
+                     <p class="text-center mt-2 text-sm text-slate-500">Figure 3: Heatmaps from ResNet50 layers and their generated captions.</p>
+                </div>
+            </div>
+            <div class="max-w-4xl mx-auto mt-16">
+                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-2xl shadow-slate-200/80 table-container">
+                    <h4 class="text-center text-lg font-semibold text-slate-700 mb-4">Table 1: Semantic recovery performance from different ResNet50 layers (COCO2017)</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Middle Layer</th>
+                                <th>BLEU-1</th>
+                                <th>CIDEr</th>
+                                <th>Cosine Similarity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>layer1</td>
+                                <td>0.24</td>
+                                <td>0.19</td>
+                                <td class="text-red-600 font-semibold">0.00%</td>
+                            </tr>
+                            <tr>
+                                <td>layer2</td>
+                                <td>0.51</td>
+                                <td>0.31</td>
+                                <td>43.76%</td>
+                            </tr>
+                            <tr>
+                                <td>layer3</td>
+                                <td>0.58</td>
+                                <td>0.55</td>
+                                <td>31.42%</td>
+                            </tr>
+                            <tr>
+                                <td>layer4</td>
+                                <td>0.62</td>
+                                <td>0.68</td>
+                                <td class="font-bold text-indigo-600">85.64%</td>
+                            </tr>
+                            <tr>
+                                <td>base (final layer)</td>
+                                <td class="font-bold">0.70</td>
+                                <td class="font-bold">0.90</td>
+                                <td class="font-bold text-indigo-600">90.52%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Label Reconstruction -->
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center mt-24">
+                <div class="md:order-2">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Label Reconstruction: High-Fidelity Recovery</h3>
+                    <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                       In our second set of experiments, we applied CAPRECOVER to label recovery tasks. The results were even more striking. When attacking a CLIP ViT model, we achieved a <span class="font-bold text-indigo-600">Top-1 accuracy of 92.71%</span> on CIFAR-10.
+                    </p>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        As the confusion matrix shows, predictions align almost perfectly with the true labels, demonstrating that even classification-oriented features contain enough information to compromise privacy with near-perfect accuracy.
+                    </p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-2xl shadow-slate-200/80 md:order-1">
+                     <img src="https://arxiv.org/html/2507.22828v2/figs/confusion_matrix_cifar10_vit32.png" alt="Confusion matrix for label recovery on CIFAR-10" class="rounded-lg object-cover w-full h-full">
+                     <p class="text-center mt-2 text-sm text-slate-500">Figure 4: Confusion matrix of label recovery results on the CIFAR-10 test set.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Defense Section -->
+    <section id="defense" class="py-20 fade-in-section">
+        <div class="container mx-auto px-6 max-w-4xl text-center">
+            <h2 class="section-title">How to Defend?</h2>
+            <p class="text-xl text-slate-600 leading-relaxed mb-8">
+                We propose a simple and highly effective defense: inject random noise into the features on the client-side, and subtract it before the next computation.
+            </p>
+            <div class="bg-white p-8 rounded-lg shadow-2xl shadow-slate-200/80 border border-slate-200">
+                <div class="bg-slate-100 p-4 rounded-md inline-block">
+                    $F^{(i+1)} = g((F^{(i)} + \epsilon^{(i)}) - \epsilon^{(i)}) = g(F^{(i)})$
+                </div>
+                <p class="mt-6 text-lg text-slate-700">
+                    This method has <span class="font-bold text-green-600">zero communication overhead</span>, requires <span class="font-bold text-green-600">no model retraining</span>, and effectively thwarts the attack.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto mt-16">
+                 <h3 class="text-2xl font-bold text-slate-800 mb-4">Defense Effectiveness</h3>
+                 <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    The table below presents the results of our attack on ResNet50 with and without the noise-based defense. The BLEU-1 scores, which measure caption quality, drop dramatically for deeper layers (layer2 to layer4) when noise is applied, demonstrating the defense's effectiveness.
+                 </p>
+                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-2xl shadow-slate-200/80 table-container">
+                    <h4 class="text-center text-lg font-semibold text-slate-700 mb-4">Table 2: Attack performance (BLEU-1) on ResNet50 w/ and w/o noise (COCO2017)</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Defense Status</th>
+                                <th>layer1</th>
+                                <th>layer2</th>
+                                <th>layer3</th>
+                                <th>layer4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Without Noise</strong></td>
+                                <td>0.24</td>
+                                <td>0.51</td>
+                                <td>0.58</td>
+                                <td>0.62</td>
+                            </tr>
+                            <tr>
+                                <td><strong>With Noise</strong></td>
+                                <td>0.49</td>
+                                <td class="text-green-600 font-bold">0.03</td>
+                                <td class="text-green-600 font-bold">0.02</td>
+                                <td class="text-green-600 font-bold">0.05</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Citation Section -->
+    <section id="citation" class="py-20 bg-slate-800 text-white fade-in-section">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <h2 class="text-4xl font-bold text-center mb-8 text-white">Citation</h2>
+            <div class="bg-slate-900 p-6 rounded-lg font-mono text-sm text-slate-300 relative border border-slate-700">
+                <button id="copy-btn" class="absolute top-4 right-4 bg-slate-700 hover:bg-slate-600 text-white font-sans text-xs px-3 py-1 rounded-md transition-colors duration-300">Copy</button>
+                <pre id="citation-text" class="whitespace-pre-wrap"><code>
+@article{image2caption_attack2025acmmm,
+    title={CapRecover: A Cross-Modality Feature Inversion Attack Framework on Vision Language Models},
+    author={Kedong Xiu and Sai Qian Zhang},
+    journal={arXiv preprint arXiv:2507.22828},
+    year={2025}
+}
+
+@inproceedings{xiu2025caprecover,
+    title     = {CAPRECOVER: A Cross-Modality Feature Inversion Attack Framework on Vision Language Models},
+    author    = {Kedong Xiu and Sai Qian Zhang},
+    booktitle = {Proceedings of the 33rd ACM International Conference on Multimedia (MM)},
+    year      = {2025},
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-8">
+        <div class="container mx-auto px-6 text-center text-slate-500">
+            <p>&copy; 2025 Kedong Xiu & Sai Qian Zhang. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render LaTeX
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ]
+                });
+            }
+
+            // Copy to clipboard functionality
+            const copyButton = document.getElementById('copy-btn');
+            const citationText = document.getElementById('citation-text').innerText;
+            
+            copyButton.addEventListener('click', () => {
+                const textArea = document.createElement('textarea');
+                textArea.value = citationText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyButton.innerText = 'Copied!';
+                    setTimeout(() => {
+                        copyButton.innerText = 'Copy';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    copyButton.innerText = 'Failed';
+                }
+                document.body.removeChild(textArea);
+            });
+
+            // Fade-in on scroll animation
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                rootMargin: '0px',
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
+
