@@ -1,17 +1,25 @@
-# Image2CaptionAttack
+# CapRecover: A Cross-modality Feature Inversion Framework on Vision Language Models
 
-**Feature Leakage Attacks on Image Captioning Models**
+This is the official repository of this paper, which is accepted by ACM MM 2025.
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch 2.0](https://img.shields.io/badge/PyTorch-2.0-red.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
+](https://github.com/psf/black)
 
 ---
 
 ## 📖 Overview
 
-This project investigates **feature leakage attacks** on image captioning systems in distributed or federated learning scenarios. We demonstrate that attackers can reconstruct complete image captions from leaked intermediate features of various neural network layers, revealing significant privacy risks in split inference and federated learning paradigms.
+As Vision-Language Models (VLMs) become increasingly integrated into user-facing applications, they are often deployed in split DNN configurations, where the visual encoder (e.g., ResNet or ViT) runs on user-side devices and only intermediate features are transmitted to the cloud for downstream processing. While this setup reduces communication overhead, the intermediate data features containing sensitive information can also expose users to privacy risks. Prior work has attempted to reconstruct images from these features to infer semantics, but such approaches often produce blurry images that obscure semantic details. In contrast, the potential to directly recover high-level semantic content — such as image labels or captions — via a cross-modality inversion attack remains largely unexplored. To address this gap, we propose \textsc{CapRecover}, a general cross-modality feature inversion framework that directly decodes semantic information from intermediate features without requiring image reconstruction. Additionally, \textsc{CapRecover} can be used to reverse engineer traditional neural networks for computer vision tasks, such as ViT, ResNet, and others.
+
+We evaluate \textsc{CapRecover} across multiple widely used datasets and victim models. Our results demonstrate that \textsc{CapRecover} can accurately recover both image labels and captions without reconstructing a single pixel. Specifically, it achieves up to 92.71\% Top-1 accuracy on the CIFAR-10 dataset for label recovery, and generates fluent and relevant captions from ResNet50's intermediate features on COCO2017 dataset, with ROUGE-L scores up to 0.52. Furthermore, an in-depth analysis of ResNet-based models reveals that deeper convolutional layers encode significantly more semantic information, whereas shallow layers contribute minimally to semantic leakage. Furthermore, we propose a straightforward and effective protection approach that adds random noise to the intermediate image features at each middle layer and subsequently removes the noise in the following layer. Our experiments indicate that this approach effectively prevents information leakage without additional training costs.
+
+
+### Attacker Illustration
+
+![Illustration](./assets/illustration_v4.jpg)
 
 ### Research Questions
 
@@ -22,6 +30,10 @@ This project investigates **feature leakage attacks** on image captioning system
 - 📈 **Performance Analysis**: Comprehensive evaluation using BLEU, ROUGE, LLM-based metrics
 
 ---
+
+## Model Framework
+
+![CapRecover_Framework](./assets/model_overview_v5.jpg)
 
 ## ✨ Key Features
 
@@ -40,8 +52,6 @@ This project investigates **feature leakage attacks** on image captioning system
 ```
 Image2CaptionAttack/
 ├── README.md                    # Project documentation (this file)
-├── MIGRATION_GUIDE.md           # Guide for updating imports
-├── CLEANUP_PLAN.md              # File cleanup documentation
 ├── requirements.txt             # Python dependencies
 ├── .env.example                 # Environment variable template
 ├── .gitignore                   # Git ignore rules
