@@ -1,6 +1,7 @@
 # CapRecover: A Cross-modality Feature Inversion Framework on Vision Language Models
 
-This is the official repository of this paper, which is accepted by ACM MM 2025.
+This is the official repository for ACM MM 2025 paper, titled "CapRecover: A Cross-modality Feature Inversion Framework on Vision Language Models".
+[Project Page](https://jus1mple.github.io/Image2CaptionAttack/)
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch 2.0](https://img.shields.io/badge/PyTorch-2.0-red.svg)](https://pytorch.org/)
